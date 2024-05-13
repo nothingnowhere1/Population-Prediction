@@ -26,7 +26,7 @@ year2 = st.number_input('Введите начальный год для пос�
 
 # Определение параметров запроса данных
 indicators = {"SP.POP.TOTL": "population"}  # Индикатор для численности населения
-start_date = '1995-01-01'
+start_date = '1980-01-01'
 end_date = '2022-01-01'
 
 # Запрос данных из базы данных Всемирного банка
@@ -116,12 +116,10 @@ if year > 2024:
 
     # Вывод результата прогноза
     st.write('Прогнозируемая численность населения %s в %d году составляет %d человек.' % (country_name, year, round(forecast[0])))
-    # Определение начального индекса для графика обучающего набора
-    year2 = year2 - 1995 if year2 - 1995 >= 0 else 0
 
     # Визуализация прогноза и фактических значений
     fig, ax = plt.subplots()
-    ax.plot(train_endog.index[year2:], train_endog[year2:], label='Training set')
+    ax.plot(train_endog.index, train_endog, label='Training set')
     ax.plot(forecast_endog.index, forecast, label='Forecast')
     ax.set_title('Population forecast for {}'.format(country_name))
     ax.set_xlabel('Date')
@@ -136,12 +134,11 @@ else:
     st.write('Численность населения %s в %d году составляла %d человек.' % (country_name, year, round(train_endog[index])))
 
     # Определение начального индекса для графика обучающего набора
-    year2 = year2 - 1995 if year2 - 1995 >= 0 else 0
     year = 2024 - year
 
     # Визуализация прогноза и фактических значений
     fig, ax = plt.subplots()
-    ax.plot(train_endog.index[year2:-year], train_endog[year2:-year], label='Population set')
+    ax.plot(train_endog.index[:-year], train_endog[:-year], label='Population set')
     ax.set_title('Population forecast for {}'.format(country_name))
     ax.set_xlabel('Date')
     ax.set_ylabel('Population')
